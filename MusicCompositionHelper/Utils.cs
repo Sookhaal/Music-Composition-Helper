@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace MusicCompositionHelper
 {
@@ -28,6 +29,10 @@ namespace MusicCompositionHelper
 			MainWindow.mainWindow.DragMove();
 		}
 
+
+		/*
+		 *		Hooking to Studio One Begin
+		 */
 		[DllImport("USER32.DLL", CharSet = CharSet.Unicode)]
 		public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 		[DllImport("USER32.DLL")]
@@ -42,7 +47,8 @@ namespace MusicCompositionHelper
 		}
 		public static void HookToS1()
 		{
-			s1 = FindWindow("CCLWindowClass", null);
+			//s1 = FindWindow("CCLWindowClass", null);
+			s1 = Process.GetProcessesByName("Studio One")[0].MainWindowHandle;
 
 			if (s1 == IntPtr.Zero)
 			{
@@ -59,6 +65,10 @@ namespace MusicCompositionHelper
 			else
 				Console.WriteLine("Hooking Off!");
 		}
+
+		/*
+		 *		Hooking to Studio One End 
+		 */
 
 
 		//Music utils
@@ -158,7 +168,6 @@ namespace MusicCompositionHelper
 		{
 			for (int i = 0; i < strings.Length; i++)
 			{
-				//strings[i][0] = tuningList[whichTuning][i];
 				strings[i][0] = tuningCreator[whichTuning].tuning[i];
 			}
 			for (int s = 0; s < strings.Length; s++)
@@ -172,11 +181,6 @@ namespace MusicCompositionHelper
 					}
 				}
 			}
-
-			/*for (int i = 0; i < strings[0].Length; i++)
-			{
-				Console.WriteLine(tones[strings[0][i]]);
-			}*/
 		}
 
 		public static void ComputeScale(string key, int[] steps)
@@ -184,8 +188,6 @@ namespace MusicCompositionHelper
 			int tonePosition = 0;
 			int startTone;
 
-			//Array.Clear(currentScale, 0, currentScale.Length);
-			//Array.Resize(ref MainWindow.scale, 32);
 			Array.Resize(ref currentScale, steps.Length);
 			startTone = FindTone(key);
 			if (startTone < 0)
@@ -194,7 +196,6 @@ namespace MusicCompositionHelper
 			{
 				Array.Resize(ref currentScale, steps.Length);
 				startTone = FindTone(key);
-				//Console.WriteLine(currentScale.Length);
 				return;
 			}
 			tonePosition = startTone;
@@ -204,7 +205,6 @@ namespace MusicCompositionHelper
 				currentScale[i] = tonePosition % tones.GetLength(0);
 				tonePosition += steps[i];
 			}
-			//WriteScale(currentScale);
 		}
 
 		public static void WriteScale(int[] scale)
@@ -222,9 +222,7 @@ namespace MusicCompositionHelper
 		{
 			for (int i = 0; i < tuningCreator.Length; i++)
 			{
-				//Array.Reverse(tuningList[i]);
 				Array.Reverse(tuningCreator[i].tuning);
-				//tuningList[i] = tuningCreator[i].getTuning();
 			}
 		}
 
@@ -288,12 +286,10 @@ namespace MusicCompositionHelper
 
 		public static void ClearChords()
 		{
-			//if (WindowChord.bNotes[0][0] == null) return;
 			for (int i = 0; i < 7; i++)
 			{
 				for (int a = 0; a < chords[i].Length; a++)
 				{
-					//WindowChord.bNotes[i][a].Visibility = Visibility.Hidden;
 					WindowChord.bNotes[i][a].Content = "";
 					WindowChord.bNotes[i][a].IsEnabled = false;
 				}
@@ -307,7 +303,6 @@ namespace MusicCompositionHelper
 
 			for (int i = 0; i < currentScale.Length; i++)
 			{
-
 				for (int a = 0; a < chords[i].Length; a++)
 				{
 					if (a * 2 + i < currentScale.Length)
@@ -317,7 +312,6 @@ namespace MusicCompositionHelper
 					else
 						chords[i][a] = currentScale[(a * 2 + i) - currentScale.Length * 2];
 
-					//WindowChord.bNotes[i][a].Visibility = Visibility.Visible;
 					WindowChord.bNotes[i][a].Content = tones[chords[i][a]];
 					WindowChord.bNotes[i][a].IsEnabled = true;
 				}

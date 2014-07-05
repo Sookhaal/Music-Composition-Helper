@@ -29,12 +29,9 @@ namespace MusicCompositionHelper
 		static SolidColorBrush
 			hookOn = new SolidColorBrush(Color.FromArgb(255, 77, 216, 58)),
 			hookOff = new SolidColorBrush(Color.FromArgb(255, 216, 58, 58));
-		//public static int[] scale = new int[0];
 		public MainWindow()
 		{
 			InitializeComponent();
-			//addTuning = b_addTuning;
-			//b_addTuning = addTuning;
 			mainWindow = this;
 			Utils.WindowOffset(windowChord, this.Left - windowChord.Width, this.Top);
 			Utils.WindowToggle(windowChord);
@@ -109,7 +106,6 @@ namespace MusicCompositionHelper
 
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
 		{
-			//this.DragMove();
 			Utils.DragWindow();
 		}
 

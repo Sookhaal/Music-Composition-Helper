@@ -1,0 +1,69 @@
+﻿<Window x:Class="MusicCompositionHelper.WindowChord"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		Title="Chord" Height="490" Width="300" ResizeMode="NoResize" WindowStyle="None" Topmost="True" PreviewMouseRightButtonDown="Window_PreviewMouseRightButtonDown" ShowInTaskbar="False">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Themes/Metro/Dark/MetroDark.MSControls.Core.Implicit.xaml" />
+				<ResourceDictionary Source="Themes/Metro/Dark/MetroDark.MSControls.Toolkit.Implicit.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<SolidColorBrush x:Key="BackgroundKey" Color="#FF181818" />
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid x:Name="gButtonGrid" Background="{StaticResource BackgroundKey}" MouseDown="DragMainWindow">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="1*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="1*"/>
+		</Grid.RowDefinitions>
+		<!--<Button x:Name="note10" Content="10" Grid.Column="0" Grid.Row="0"/>-->
+		<!--
+		<Button x:Name="note10" Content="10" Grid.Column="0" Grid.Row="0"/>
+		<Button x:Name="note11" Content="11" Grid.Column="1" Grid.Row="0"/>
+		<Button x:Name="note12" Content="12" Grid.Column="2" Grid.Row="0"/>
+		<Button x:Name="note13" Content="13" Grid.Column="3" Grid.Row="0"/>
+
+		<Button x:Name="note20" Content="20" Grid.Column="0" Grid.Row="1"/>
+		<Button x:Name="note21" Content="21" Grid.Column="1" Grid.Row="1"/>
+		<Button x:Name="note22" Content="22" Grid.Column="2" Grid.Row="1"/>
+		<Button x:Name="note23" Content="23" Grid.Column="3" Grid.Row="1"/>
+
+		<Button x:Name="note30" Content="30" Grid.Column="0" Grid.Row="2"/>
+		<Button x:Name="note31" Content="31" Grid.Column="1" Grid.Row="2"/>
+		<Button x:Name="note32" Content="32" Grid.Column="2" Grid.Row="2"/>
+		<Button x:Name="note33" Content="33" Grid.Column="3" Grid.Row="2"/>
+
+		<Button x:Name="note40" Content="40" Grid.Column="0" Grid.Row="3"/>
+		<Button x:Name="note41" Content="41" Grid.Column="1" Grid.Row="3"/>
+		<Button x:Name="note42" Content="42" Grid.Column="2" Grid.Row="3"/>
+		<Button x:Name="note43" Content="43" Grid.Column="3" Grid.Row="3"/>
+
+		<Button x:Name="note50" Content="50" Grid.Column="0" Grid.Row="4"/>
+		<Button x:Name="note51" Content="51" Grid.Column="1" Grid.Row="4"/>
+		<Button x:Name="note52" Content="52" Grid.Column="2" Grid.Row="4"/>
+		<Button x:Name="note53" Content="53" Grid.Column="3" Grid.Row="4"/>
+
+		<Button x:Name="note60" Content="60" Grid.Column="0" Grid.Row="5"/>
+		<Button x:Name="note61" Content="61" Grid.Column="1" Grid.Row="5"/>
+		<Button x:Name="note62" Content="62" Grid.Column="2" Grid.Row="5"/>
+		<Button x:Name="note63" Content="63" Grid.Column="3" Grid.Row="5"/>
+
+		<Button x:Name="note70" Content="70" Grid.Column="0" Grid.Row="6"/>
+		<Button x:Name="note71" Content="71" Grid.Column="1" Grid.Row="6"/>
+		<Button x:Name="note72" Content="72" Grid.Column="2" Grid.Row="6"/>
+		<Button x:Name="note73" Content="73" Grid.Column="3" Grid.Row="6"/>
+		-->
+
+	</Grid>
+</Window>

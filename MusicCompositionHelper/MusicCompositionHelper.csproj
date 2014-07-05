@@ -37,7 +37,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bass.Net, Version=2.4.10.3, Culture=neutral, PublicKeyToken=b7566c273e6ef480, processorArchitecture=MSIL" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -177,32 +176,6 @@
     <Resource Include="images\TuningPrompt.png" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="samples\000.wav" />
-    <Content Include="samples\001.wav" />
-    <Content Include="samples\002.wav" />
-    <Content Include="samples\003.wav" />
-    <Content Include="samples\004.wav" />
-    <Content Include="samples\005.wav" />
-    <Content Include="samples\006.wav" />
-    <Content Include="samples\007.wav" />
-    <Content Include="samples\008.wav" />
-    <Content Include="samples\009.wav" />
-    <Content Include="samples\010.wav" />
-    <Content Include="samples\011.wav" />
-    <Content Include="samples\100.wav" />
-    <Content Include="samples\101.wav" />
-    <Content Include="samples\102.wav" />
-    <Content Include="samples\103.wav" />
-    <Content Include="samples\104.wav" />
-    <Content Include="samples\105.wav" />
-    <Content Include="samples\106.wav" />
-    <Content Include="samples\107.wav" />
-    <Content Include="samples\108.wav" />
-    <Content Include="samples\109.wav" />
-    <Content Include="samples\110.wav" />
-    <Content Include="samples\111.wav" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

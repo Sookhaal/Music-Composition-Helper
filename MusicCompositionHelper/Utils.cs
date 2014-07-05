@@ -4,9 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using Un4seen.Bass;
-using Un4seen.Bass.Misc;
-using Un4seen.Bass.AddOn.Wma;
 using System.Runtime.InteropServices;
 
 namespace MusicCompositionHelper

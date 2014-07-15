@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using Nelios.S1.Tools;
+using Nelios.Music.Tools;
 
 namespace MusicCompositionHelper
 {
 	class Utils
 	{
-		//Programming utils
+		//Misc
 		public static void WindowToggle(Window window)
 		{
 			if (window.IsVisible) window.Hide();
@@ -29,33 +31,17 @@ namespace MusicCompositionHelper
 			MainWindow.mainWindow.DragMove();
 		}
 
-
-		/*
-		 *		Hooking to Studio One Begin
-		 */
-		[DllImport("USER32.DLL", CharSet = CharSet.Unicode)]
-		public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-		[DllImport("USER32.DLL")]
-		public static extern bool SetForegroundWindow(IntPtr hWnd);
+		/*[DllImport("USER32.DLL")]
+		public static extern bool SetForegroundWindow(IntPtr hWnd);*/
+		public static S1Controller s1Controller = new S1Controller();
 		public static IntPtr s1 = IntPtr.Zero;
 		public static bool s1On = false;
-		public static void Send(String key) { System.Windows.Forms.SendKeys.SendWait(key); }
+		/*public static void Send(String key) { System.Windows.Forms.SendKeys.SendWait(key); }
 		public static void Send(String key, int howManyTime)
 		{
 			for (int i = 0; i < howManyTime; i++)
 				System.Windows.Forms.SendKeys.SendWait(key);
-		}
-		public static void HookToS1()
-		{
-			//s1 = FindWindow("CCLWindowClass", null);
-			s1 = Process.GetProcessesByName("Studio One")[0].MainWindowHandle;
-
-			if (s1 == IntPtr.Zero)
-			{
-				MessageBox.Show("Studio One is not running.");
-				return;
-			}
-		}
+		}*/
 
 		public static void ToggleS1()
 		{
@@ -66,30 +52,15 @@ namespace MusicCompositionHelper
 				Console.WriteLine("Hooking Off!");
 		}
 
-		/*
-		 *		Hooking to Studio One End 
-		 */
-
-
-		//Music utils
-
-		public static String[] tones = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-		public static int[] currentScale = new int[0];
+		//Music
 		// C  C# D  D# E  F  F# G  G# A  A# B
 		// 0  1  2  3  4  5  6  7  8  9  10 11
-		public static Tuning[] tuningCreator = 
-		{
-			new Tuning(new int[] { 7, 0, 7, 0, 7, 0, 4 }, "Open C"),
-			new Tuning(new int[] { 6, 11, 6, 11, 6, 11, 3 }, "Open B"),
-			new Tuning(new int[] { 11, 4, 9, 2, 7, 11, 4 }, "Standard"),
-			new Tuning(new int[] { 10, 3, 8, 1, 6, 10, 3 }, "1/2 Down"),
-			new Tuning(new int[] { 9, 2, 7, 0, 5, 9, 2 }, "Full Down"),
-			new Tuning(new int[] { 9, 2, 9, 2, 7, 11, 4 }, "Drop D"),
-			new Tuning(new int[] { 7, 0, 7, 0, 5, 9, 2 }, "Drop C"),
-			new Tuning(new int[] { 6, 11, 6, 11, 4, 8, 1 }, "Drop B"),
-			new Tuning(new int[] { 4, 9, 4, 9, 2, 6, 11 }, "Drop A")
-		};
-		//public static int[][] tuningList = new int[tuningCreator.Length][];
+		public static String[] tones = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+		public static int[] currentScale = new int[0];
+
+		public static List<Tuning> tuningList = new List<Tuning>();
+		public static List<Scale> scaleList = new List<Scale>();
+
 		public static int whichTuning;
 		private static int[]
 			string0 = new int[16],
@@ -111,76 +82,25 @@ namespace MusicCompositionHelper
 			chord6 = new int[4];
 		public static int[][] chords = { chord0, chord1, chord2, chord3, chord4, chord5, chord6 };
 
-		//Standard modes
-		public static int[]
-			scaleIonian = { 2, 2, 1, 2, 2, 2, 1 },			//AKA Major
-			scaleDorian = { 2, 1, 2, 2, 2, 1, 2 },
-			scalePhrygian = { 1, 2, 2, 2, 1, 2, 2 },
-			scaleLydian = { 2, 2, 2, 1, 2, 2, 1 },
-			scaleMixolydian = { 2, 2, 1, 2, 2, 1, 2 },
-			scaleAeolian = { 2, 1, 2, 2, 1, 2, 2 },			//AKA Minor
-			scaleLocrian = { 1, 2, 2, 1, 2, 2, 2 },
-
-		//Harmonic modes
-			scaleIonianHarmonic = { 2, 1, 2, 2, 1, 3, 1 },	//AKA Harmonic Minor
-			scaleDorianHarmonic = { 1, 2, 2, 1, 3, 1, 2 },
-			scalePhrygianHarmonic = { 2, 2, 1, 3, 1, 2, 1 },
-			scaleLydianHarmonic = { 2, 1, 3, 1, 2, 1, 2 },
-			scaleMixolydianHarmonic = { 1, 3, 1, 2, 1, 2, 2 },
-			scaleAeolianHarmonic = { 3, 1, 2, 1, 2, 2, 1 },
-			scaleLocrianHarmonic = { 1, 2, 1, 2, 2, 1, 3 },
-
-		//Melodic modes
-			scaleIonianMelodic = { 2, 1, 2, 2, 2, 2, 1 },	//AKA Melodic Minor
-			scaleDorianMelodic = { 1, 2, 2, 2, 2, 2, 1 },
-			scaleLydianAugmentedMelodic = { 2, 2, 2, 2, 1, 2, 1 },
-			scaleLydianMelodic = { 2, 2, 2, 1, 2, 1, 2 },
-			scaleMixolydianMelodic = { 2, 2, 1, 2, 1, 2, 2 },
-			scaleLocrianMelodic = { 2, 1, 2, 1, 2, 2, 2 },
-			scaleSuperlocrianMelodic = { 1, 2, 1, 2, 2, 2, 2 },
-
-		//Pentatonics
-			scalePentatonicMajor = { 2, 2, 3, 2, 3 },
-			scalePentatonicMinor = { 3, 2, 2, 3, 2 },
-			none = { };
-
-
-		public static int[][] scales = {scaleIonian, scaleDorian, scalePhrygian, scaleLydian, scaleMixolydian, scaleAeolian, scaleLocrian, none,
-
-									   scaleIonianHarmonic, scaleDorianHarmonic, scalePhrygianHarmonic, scaleLydianHarmonic,
-									   scaleMixolydianHarmonic, scaleAeolianHarmonic, scaleLocrianHarmonic, none,
-
-									   scaleIonianMelodic, scaleDorianMelodic,scaleLydianAugmentedMelodic, scaleLydianMelodic,
-									   scaleMixolydianMelodic, scaleLocrianMelodic, scaleSuperlocrianMelodic, none,
-
-									   scalePentatonicMajor,scalePentatonicMinor};
-
 		public static int FindTone(string key)
 		{
 			for (int i = 0; i < tones.GetLength(0); i++)
-			{
 				if (key == tones[i]) return i;
-			}
 			return -1;
 		}
 
 		public static void StringsSetup()
 		{
 			for (int i = 0; i < strings.Length; i++)
-			{
-				strings[i][0] = tuningCreator[whichTuning].tuning[i];
-			}
+				strings[i][0] = tuningList[whichTuning].tones[i];
+
 			for (int s = 0; s < strings.Length; s++)
-			{
 				for (int i = 1; i < 16; i++)
 				{
 					strings[s][i] = strings[s][i - 1] + 1;
 					if (strings[s][i] > 11)
-					{
 						strings[s][i] -= 12;
-					}
 				}
-			}
 		}
 
 		public static void ComputeScale(string key, int[] steps)
@@ -210,20 +130,16 @@ namespace MusicCompositionHelper
 		public static void WriteScale(int[] scale)
 		{
 			foreach (int i in scale)
-			{
 				Console.WriteLine(tones[i]);
-			}
 		}
 
 		public static int IntervalFromC(String key) { return FindTone(key); }
 		public static int IntervalFromC(String key, int offset) { return FindTone(key) + offset; }
 
-		public static void Setup()
+		public static void TuningSetup()
 		{
-			for (int i = 0; i < tuningCreator.Length; i++)
-			{
-				Array.Reverse(tuningCreator[i].tuning);
-			}
+			for (int i = 0; i < tuningList.Count; i++)
+				Array.Reverse(tuningList[i].tones);
 		}
 
 		public static void SetTuning(int index)
@@ -237,7 +153,6 @@ namespace MusicCompositionHelper
 		{
 			if (WindowScale.noteBackgrounds[0][0] == null) return;
 			for (int i = 0; i < scale.Length; i++)
-			{
 				if (strings[whichString][whichFret] == currentScale[i])
 				{
 					if (FindTone(tones[i]) == 0)
@@ -247,53 +162,44 @@ namespace MusicCompositionHelper
 
 
 					for (int a = 0; a < chords[WindowChord.clickedChordRow].Length; a++)
-					{
 						if (currentScale[i] == chords[WindowChord.clickedChordRow][a] && WindowChord.clickedChord != null && WindowChord.toggle)
 							WindowScale.noteBackgrounds[whichString][whichFret].Source = WindowScale.imgHighlight;
-					}
 
 					WindowScale.noteBackgrounds[whichString][whichFret].Visibility = Visibility.Visible;
 					//Console.WriteLine("String " + whichString + " Fret " + strings[whichString][whichFret]);
 				}
-			}
 		}
 
 		public static void PlaceTones(int whichString, int whichFret, int[] scale)
 		{
 			if (WindowScale.noteTones[0][0] == null) return;
 			for (int i = 0; i < scale.Length; i++)
-			{
 				if (strings[whichString][whichFret] == currentScale[i])
 				{
 					WindowScale.noteTones[whichString][whichFret].Source = WindowScale.imgTone[currentScale[i]];
 					WindowScale.noteTones[whichString][whichFret].Visibility = Visibility.Visible;
 				}
-			}
 		}
 
 		public static void ClearNotes()
 		{
 			if (WindowScale.noteBackgrounds[0][0] == null) return;
 			for (int i = 0; i < 7; i++)
-			{
 				for (int a = 0; a < 16; a++)
 				{
 					WindowScale.noteBackgrounds[i][a].Visibility = Visibility.Hidden;
 					WindowScale.noteTones[i][a].Visibility = Visibility.Hidden;
 				}
-			}
 		}
 
 		public static void ClearChords()
 		{
 			for (int i = 0; i < 7; i++)
-			{
 				for (int a = 0; a < chords[i].Length; a++)
 				{
 					WindowChord.bNotes[i][a].Content = "";
 					WindowChord.bNotes[i][a].IsEnabled = false;
 				}
-			}
 		}
 
 		public static void PlaceChords()
@@ -302,7 +208,6 @@ namespace MusicCompositionHelper
 			ClearChords();
 
 			for (int i = 0; i < currentScale.Length; i++)
-			{
 				for (int a = 0; a < chords[i].Length; a++)
 				{
 					if (a * 2 + i < currentScale.Length)
@@ -315,7 +220,6 @@ namespace MusicCompositionHelper
 					WindowChord.bNotes[i][a].Content = tones[chords[i][a]];
 					WindowChord.bNotes[i][a].IsEnabled = true;
 				}
-			}
 		}
 	}
 }

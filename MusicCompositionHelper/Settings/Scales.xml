@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfScale xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Scale name="Ionian / Major" tones="2 2 1 2 2 2 1" />
+	<Scale name="Dorian" tones="2 1 2 2 2 1 2" />
+	<Scale name="Phrygian" tones="1 2 2 2 1 2 2" />
+	<Scale name="Lydian" tones="2 2 2 1 2 2 1" />
+	<Scale name="Mixolydian" tones="2 2 1 2 2 1 2" />
+	<Scale name="Aeolian / Minor" tones="2 1 2 2 1 2 2" />
+	<Scale name="Locrian" tones="1 2 2 1 2 2 2" />
+
+	<Scale name="none"/>
+	<Scale name="Ionian Harmonic / Harmonic Minor" tones="2 1 2 2 1 3 1" />
+	<Scale name="Dorian Harmonic" tones="1 2 2 1 3 1 2" />
+	<Scale name="Phrygian Harmonic" tones="2 2 1 3 1 2 1" />
+	<Scale name="Lydian Harmonic" tones="2 1 3 1 2 1 2" />
+	<Scale name="Mixolydian Harmonic" tones="1 3 1 2 1 2 2" />
+	<Scale name="Aeolian Harmonic" tones="3 1 2 1 2 2 1" />
+	<Scale name="Locrian Harmonic" tones="1 2 1 2 2 1 3" />
+
+	<Scale name="none"/>
+	<Scale name="Ionian Melodic / Melodic Minor" tones="2 1 2 2 2 2 1" />
+	<Scale name="Dorian Melodic" tones="1 2 2 2 2 2 1" />
+	<Scale name="Lydian Augmented Melodic" tones="2 2 2 2 1 2 1" />
+	<Scale name="Lydian Melodic" tones="2 2 2 1 2 1 2" />
+	<Scale name="Mixolydian Melodic" tones="2 2 1 2 1 2 2" />
+	<Scale name="Locrian Melodic" tones="2 1 2 1 2 2 2" />
+	<Scale name="Superlocrian Melodic" tones="1 2 1 2 2 2 2" />
+
+	<Scale name="none"/>
+	<Scale name="Pentatonic Major" tones="2 2 3 2 3" />
+	<Scale name="Pentatonic Minor" tones="3 2 2 3 2" />
+</ArrayOfScale>

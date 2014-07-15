@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nelios.S1.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,7 +41,6 @@ namespace MusicCompositionHelper
 			InitializeComponent();
 
 			for (int i = 0; i < bNotes.Length; i++)
-			{
 				for (int a = 0; a < bNotes[i].Length; a++)
 				{
 					bNotes[i][a] = new Button();
@@ -52,7 +52,6 @@ namespace MusicCompositionHelper
 					bNotes[i][a].Click += ChordClick;
 					bNotes[i][a].FontSize = 20;
 				}
-			}
 			Utils.PlaceChords();
 		}
 
@@ -68,8 +67,7 @@ namespace MusicCompositionHelper
 
 		private void ChordClick(object sender, RoutedEventArgs e)
 		{
-			Utils.Send("^(+(l))");
-			userOffset = 0;
+			Utils.s1Controller.SendKey(S1Controller.VKeys.VK_L, S1Controller.KeyboardMod.VK_CONTROL, S1Controller.KeyboardMod.VK_SHIFT);
 			clickedChord = (Button)sender;
 			clickedChordRow = (int)Char.GetNumericValue(clickedChord.Name[clickedChord.Name.Length - 1]);
 			if (clickedChordRow == oldClickedChordRow) toggle = !toggle;
@@ -79,18 +77,13 @@ namespace MusicCompositionHelper
 				toggle = true;
 			}
 			ChordCompute();
-			userOffset = 0;
 		}
 
 		public static void ResetHighlight()
 		{
 			for (int a = 0; a < bNotes[0].Length; a++)
-			{
 				for (int i = 0; i < bNotes.Length; i++)
-				{
 					bNotes[i][a].Foreground = normal;
-				}
-			}
 			WindowScale.windowScale.Do();
 		}
 
@@ -99,31 +92,70 @@ namespace MusicCompositionHelper
 			for (int a = 0; a < bNotes[0].Length; a++)
 			{
 				for (int i = 0; i < bNotes.Length; i++)
-				{
 					bNotes[i][a].Foreground = normal;
-				}
 				if (toggle)
 				{
 					bNotes[clickedChordRow][a].Foreground = highlight;
 					if (Utils.s1On && Utils.s1 != IntPtr.Zero)
 					{
-						Utils.SetForegroundWindow(Utils.s1);
-						Utils.Send("^v");
+						Utils.s1Controller.SendKey(S1Controller.VKeys.VK_V, S1Controller.KeyboardMod.VK_CONTROL);
 						if (a > 0)
 							if (Utils.IntervalFromC(bNotes[clickedChordRow][a].Content.ToString()) < Utils.IntervalFromC(bNotes[clickedChordRow][a - 1].Content.ToString()))
 								offset = 12;
-						if (offset + userOffset < 0)
-							Utils.Send("{DOWN}", Math.Abs(Utils.IntervalFromC(bNotes[clickedChordRow][a].Content.ToString(), offset + userOffset)));
-						else
-							Utils.Send("{UP}", Utils.IntervalFromC(bNotes[clickedChordRow][a].Content.ToString(), offset + userOffset));
+						for (int i = 0; i < Math.Abs(Utils.IntervalFromC(bNotes[clickedChordRow][a].Content.ToString(), offset)); i++)
+						{
+							System.Threading.Thread.Sleep(12);
+							Utils.s1Controller.SendKey(S1Controller.VKeys.VK_UP);
+						}
 					}
 				}
 				else bNotes[clickedChordRow][a].Foreground = normal;
 			}
+			if (userOffset < 0 && toggle)
+			{
+				OctaveDown(userOffset);
+			}
+			else if (userOffset > 0 && toggle)
+			{
+				OctaveUp(userOffset);
+			}
 			Console.WriteLine("");
+			Console.WriteLine(userOffset);
 			offset = 0;
 			WindowScale.windowScale.Do();
-			Utils.Send("^(+(l))");
+			Utils.s1Controller.SendKey(S1Controller.VKeys.VK_L, S1Controller.KeyboardMod.VK_CONTROL, S1Controller.KeyboardMod.VK_SHIFT);
+		}
+
+		public static void OctaveUp(int offset)
+		{
+			Utils.s1Controller.SendKey(S1Controller.VKeys.VK_L);
+			for (int k = 0; k < WindowChord.bNotes[0].Length - 1; k++)
+			{
+				Utils.s1Controller.SendKey(S1Controller.VKeys.VK_LEFT, S1Controller.KeyboardMod.VK_SHIFT);
+				System.Threading.Thread.Sleep(12);
+			}
+			for (int i = 0; i < offset; i++) Utils.s1Controller.SendKey(S1Controller.VKeys.VK_UP, S1Controller.KeyboardMod.VK_SHIFT);
+			for (int k = 0; k < WindowChord.bNotes[0].Length - 1; k++)
+			{
+				Utils.s1Controller.SendKey(S1Controller.VKeys.VK_RIGHT, S1Controller.KeyboardMod.VK_SHIFT);
+				System.Threading.Thread.Sleep(12);
+			}
+		}
+
+		public static void OctaveDown(int offset)
+		{
+			Utils.s1Controller.SendKey(S1Controller.VKeys.VK_L);
+			for (int k = 0; k < WindowChord.bNotes[0].Length - 1; k++)
+			{
+				Utils.s1Controller.SendKey(S1Controller.VKeys.VK_LEFT, S1Controller.KeyboardMod.VK_SHIFT);
+				System.Threading.Thread.Sleep(12);
+			}
+			for (int i = 0; i > offset; i--) Utils.s1Controller.SendKey(S1Controller.VKeys.VK_DOWN, S1Controller.KeyboardMod.VK_SHIFT);
+			for (int k = 0; k < WindowChord.bNotes[0].Length - 1; k++)
+			{
+				Utils.s1Controller.SendKey(S1Controller.VKeys.VK_RIGHT, S1Controller.KeyboardMod.VK_SHIFT);
+				System.Threading.Thread.Sleep(12);
+			}
 		}
 	}
 }

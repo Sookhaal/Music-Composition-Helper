@@ -62,8 +62,8 @@
 				<ColumnDefinition Width="20"/>
 			</Grid.ColumnDefinitions>
 			<ComboBox x:Name="choseTuning" Text="Tuning" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0" DropDownClosed="choseTuning_DropDownClosed" FontSize="25" MouseMove="choseTuning_MouseMove" PreviewMouseWheel="choseTuning_PreviewMouseWheel" PreviewKeyDown="choseTuning_PreviewKeyDown" />
-			<ComboBox x:Name="choseScale" Text="Scale" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0" MaxDropDownHeight="300" DropDownClosed="choseScale_DropDownClosed" FontSize="25" Grid.ColumnSpan="3" MouseMove="choseScale_MouseMove" PreviewMouseWheel="choseScale_PreviewMouseWheel" PreviewKeyDown="choseScale_PreviewKeyDown" >
-				<ComboBoxItem Content="Ionian / Major" />
+			<ComboBox x:Name="choseScale" Text="Scale" Grid.Column="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0" MaxDropDownHeight="300" DropDownClosed="choseScale_DropDownClosed" FontSize="25" Grid.ColumnSpan="3" MouseMove="choseScale_MouseMove" PreviewMouseWheel="choseScale_PreviewMouseWheel" PreviewKeyDown="choseScale_PreviewKeyDown" />
+				<!--<ComboBoxItem Content="Ionian / Major" />
 				<ComboBoxItem Content="Dorian" />
 				<ComboBoxItem Content="Phrygian" />
 				<ComboBoxItem Content="Lydian" />
@@ -89,7 +89,7 @@
 				<Separator></Separator>
 				<ComboBoxItem Content="Pentatonic Major" />
 				<ComboBoxItem Content="Pentatonic Minor" />
-			</ComboBox>
+			</ComboBox>-->
 			<ComboBox x:Name="choseKey" Text="Tuning" Grid.Column="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="0" DropDownClosed="choseKey_DropDownClosed" MaxDropDownHeight="300" FontSize="30" MouseMove="choseKey_MouseMove" PreviewMouseWheel="choseKey_PreviewMouseWheel" PreviewKeyDown="choseKey_PreviewKeyDown">
 				<ComboBoxItem Content="C" MinHeight="20" />
 				<ComboBoxItem Content="C#" MinHeight="20"/>

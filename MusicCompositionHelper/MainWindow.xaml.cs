@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Nelios.S1.Tools;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MusicCompositionHelper
 {
@@ -20,22 +12,23 @@ namespace MusicCompositionHelper
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		WindowScale windowScale = new WindowScale();
-		WindowChord windowChord = new WindowChord();
-		TuningPrompt tuningPrompt = new TuningPrompt();
-
-		public static MainWindow mainWindow;
 		public static Button addTuning;
-		static SolidColorBrush
+		public static MainWindow mainWindow;
+
+		private static SolidColorBrush
 			hookOn = new SolidColorBrush(Color.FromArgb(255, 77, 216, 58)),
 			hookOff = new SolidColorBrush(Color.FromArgb(255, 216, 58, 58));
+
+		private TuningPrompt tuningPrompt = new TuningPrompt();
+		private WindowChord windowChord = new WindowChord();
+		private WindowScale windowScale = new WindowScale();
+
 		public MainWindow()
 		{
 			InitializeComponent();
 			mainWindow = this;
 			Utils.WindowOffset(windowChord, this.Left - windowChord.Width, this.Top);
 			Utils.WindowToggle(windowChord);
-
 			Utils.WindowOffset(windowScale, this.Left, this.Top + this.Height);
 			Utils.WindowToggle(windowScale);
 		}
@@ -45,56 +38,58 @@ namespace MusicCompositionHelper
 			Application.Current.Shutdown();
 		}
 
+		private void b_OctaveDown_Click(object sender, RoutedEventArgs e)
+		{
+			WindowChord.OctaveDown(-1);
+			WindowChord.userOffset -= 1;
+		}
+
+		private void b_OctaveUp_Click(object sender, RoutedEventArgs e)
+		{
+			WindowChord.OctaveUp(1);
+			WindowChord.userOffset += 1;
+		}
+
 		private void b_StudioOne_Click(object sender, RoutedEventArgs e)
 		{
-			if (Utils.s1 == IntPtr.Zero)
-				Utils.HookToS1();
-			if (Utils.s1 != IntPtr.Zero)
-				Utils.ToggleS1();
-			if (Utils.s1On)
+			try
 			{
-				b_StudioOne.Foreground = hookOn;
-				b_UndoS1.IsEnabled = true;
-				b_OctaveUp.IsEnabled = true;
-				b_OctaveDown.IsEnabled = true;
+				if (Utils.s1 == IntPtr.Zero)
+					Utils.s1 = Utils.s1Controller.GetS1();
+				if (Utils.s1 != IntPtr.Zero)
+					Utils.ToggleS1();
+				if (Utils.s1On)
+				{
+					b_StudioOne.Foreground = hookOn;
+					b_UndoS1.IsEnabled = true;
+					b_OctaveUp.IsEnabled = true;
+					b_OctaveDown.IsEnabled = true;
+				}
+				else
+				{
+					b_StudioOne.Foreground = hookOff;
+					b_UndoS1.IsEnabled = false;
+					b_OctaveUp.IsEnabled = false;
+					b_OctaveDown.IsEnabled = false;
+				}
 			}
-			else
+			catch (Exception ex)
 			{
-				b_StudioOne.Foreground = hookOff;
-				b_UndoS1.IsEnabled = false;
-				b_OctaveUp.IsEnabled = false;
-				b_OctaveDown.IsEnabled = false;
+				Console.WriteLine(Utils.tuningList[0].name);
+				MessageBox.Show("Error: " + ex.Message);
 			}
 		}
 
 		private void b_UndoS1_Click(object sender, RoutedEventArgs e)
 		{
-			Utils.SetForegroundWindow(Utils.s1);
-			Utils.Send("l");
+			Utils.s1Controller.SendKey(S1Controller.VKeys.VK_L);
 			for (int k = 0; k < WindowChord.bNotes[0].Length; k++)
-				Utils.Send("{DEL}");
+			{
+				Utils.s1Controller.SendKey(S1Controller.VKeys.VK_DELETE);
+				System.Threading.Thread.Sleep(10);
+			}
 			WindowChord.toggle = false;
 			WindowChord.ResetHighlight();
-		}
-
-		private void b_OctaveUp_Click(object sender, RoutedEventArgs e)
-		{
-			Utils.SetForegroundWindow(Utils.s1);
-			Utils.Send("l");
-			for (int k = 0; k < WindowChord.bNotes[0].Length; k++)
-				Utils.Send("{DEL}");
-			WindowChord.userOffset += 12;
-			WindowChord.ChordCompute();
-		}
-
-		private void b_OctaveDown_Click(object sender, RoutedEventArgs e)
-		{
-			Utils.SetForegroundWindow(Utils.s1);
-			Utils.Send("l");
-			for (int k = 0; k < WindowChord.bNotes[0].Length; k++)
-				Utils.Send("{DEL}");
-			WindowChord.userOffset -= 12;
-			WindowChord.ChordCompute();
 		}
 
 		private void Window_LocationChanged(object sender, EventArgs e)

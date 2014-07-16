@@ -67,7 +67,8 @@ namespace MusicCompositionHelper
 
 		private void ChordClick(object sender, RoutedEventArgs e)
 		{
-			Utils.s1Controller.SendKey(S1Controller.VKeys.VK_L, S1Controller.KeyboardMod.VK_CONTROL, S1Controller.KeyboardMod.VK_SHIFT);
+			if (Utils.s1On)
+				Utils.s1Controller.SendKey(S1Controller.VKeys.VK_L, S1Controller.KeyboardMod.VK_CONTROL, S1Controller.KeyboardMod.VK_SHIFT);
 			clickedChord = (Button)sender;
 			clickedChordRow = (int)Char.GetNumericValue(clickedChord.Name[clickedChord.Name.Length - 1]);
 			if (clickedChordRow == oldClickedChordRow) toggle = !toggle;
@@ -123,7 +124,8 @@ namespace MusicCompositionHelper
 			Console.WriteLine(userOffset);
 			offset = 0;
 			WindowScale.windowScale.Do();
-			Utils.s1Controller.SendKey(S1Controller.VKeys.VK_L, S1Controller.KeyboardMod.VK_CONTROL, S1Controller.KeyboardMod.VK_SHIFT);
+			if (Utils.s1On)
+				Utils.s1Controller.SendKey(S1Controller.VKeys.VK_L, S1Controller.KeyboardMod.VK_CONTROL, S1Controller.KeyboardMod.VK_SHIFT);
 		}
 
 		public static void OctaveUp(int offset)
